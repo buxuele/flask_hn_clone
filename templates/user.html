@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block title %}{{ username }} - Hacker News{%
+endblock %} {% block content %}
+<table>
+  <tr>
+    <td>
+      <h2>User: {{ username }}</h2>
+      <p>This is a placeholder user profile page.</p>
+      <p>In a full implementation, this would show:</p>
+      <ul>
+        <li>User's submitted stories</li>
+        <li>User's comments</li>
+        <li>User karma</li>
+        <li>Account creation date</li>
+      </ul>
+      <p><a href="/">Return to homepage</a></p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

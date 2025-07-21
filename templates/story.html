@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}{{ story.title }} - Hacker News{%
+endblock %} {% block content %}
+<table>
+  <tr>
+    <td>
+      <h2>{{ story.title }}</h2>
+      {% if story.is_external_link() %}
+      <p>
+        <strong>URL:</strong>
+        <a href="{{ story.url }}" target="_blank" rel="noopener"
+          >{{ story.url }}</a
+        >
+      </p>
+      {% endif %}
+      <p><strong>Points:</strong> {{ story.points }}</p>
+      <p>
+        <strong>Author:</strong>
+        <a href="{{ story.get_user_link() }}" class="hnuser"
+          >{{ story.author }}</a
+        >
+      </p>
+      <p><strong>Time:</strong> {{ story.time_ago }}</p>
+      <p><strong>Comments:</strong> {{ story.comment_text }}</p>
+      {% if story.domain %}
+      <p><strong>Domain:</strong> {{ story.domain }}</p>
+      {% endif %}
+
+      <hr />
+      <p>This is a placeholder story page.</p>
+      <p>In a full implementation, this would show:</p>
+      <ul>
+        <li>Story comments thread</li>
+        <li>Voting functionality</li>
+        <li>Comment submission form</li>
+        <li>Related stories</li>
+      </ul>
+      <p><a href="/">Return to homepage</a></p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

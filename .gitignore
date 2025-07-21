@@ -1,0 +1,24 @@
+# 文件夹
+.idea/
+.kiro/
+.vscode/
+
+instance/
+__pycache__/
+hn_venv/
+
+static/uploads/
+
+# 一些关键文件！！
+*.json
+*.bak
+.env
+
+*.pyc
+*.pyw
+*.bat
+
+start_repo.py
+gg.bat
+
+

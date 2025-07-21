@@ -1,0 +1,236 @@
+/* Hacker News Clone Styling */
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 975圆体字体定义 */
+@font-face {
+  font-family: "975MaruSC";
+  src: url("../fonts/975MaruSC-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "975MaruSC";
+  src: url("../fonts/975MaruSC-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "975MaruSC";
+  src: url("../fonts/975MaruSC-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+body {
+  font-family: "975MaruSC", "Nunito", Verdana, Geneva, sans-serif;
+  font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
+  color: #000000;
+  background-color: #f6f6ef;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4; /* 增加行高提高可读性 */
+}
+
+/* Main table styling */
+#hnmain {
+  background-color: #f6f6ef;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0;
+  margin: 0;
+}
+
+/* Header styling */
+.pagetop {
+  font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
+  color: #000000;
+}
+
+.pagetop a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.pagetop a:hover {
+  text-decoration: underline;
+}
+
+.hnname {
+  margin-right: 10px;
+}
+
+.hnname a {
+  color: #000000;
+  text-decoration: none;
+}
+
+/* Story list styling */
+.athing {
+  background-color: #f6f6ef;
+}
+
+.title {
+  padding-right: 4px;
+}
+
+.rank {
+  font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
+  text-align: right;
+  color: #828282;
+  padding-right: 6px; /* 增加间距 */
+}
+
+.votelinks {
+  width: 14px;
+  text-align: center;
+  padding-right: 4px;
+}
+
+.votearrow {
+  width: 10px;
+  height: 10px;
+  border: 0px;
+  margin: 3px 2px 6px;
+  background: url("data:image/gif;base64,R0lGODlhCgAKAKECAAAAAP///////////yH5BAEKAAIALAAAAAAKAAoAAAIRlI+py+0Po5y02ouz3rz7rxUAOw==")
+    no-repeat;
+  cursor: pointer;
+}
+
+.titleline {
+  font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
+}
+
+.titleline a {
+  color: #1a4480; /* 深蓝色字体，与翻译后的颜色一致 */
+  text-decoration: none;
+  font-weight: bold; /* 将标题加粗 */
+}
+
+.titleline a:visited {
+  color: #828282;
+}
+
+.titleline a:hover {
+  text-decoration: underline;
+}
+
+.sitebit {
+  font-size: 12pt; /* 增大150%: 8pt * 1.5 = 12pt */
+  color: #828282;
+}
+
+.sitebit a {
+  color: #828282;
+  text-decoration: none;
+}
+
+.sitebit a:hover {
+  text-decoration: underline;
+}
+
+.sitestr {
+  color: #828282;
+}
+
+/* Subtext (points, author, time, comments) */
+.subtext {
+  font-size: 10.5pt; /* 增大150%: 7pt * 1.5 = 10.5pt */
+  color: #828282;
+  padding-top: 3px; /* 增加上边距 */
+  padding-bottom: 8px; /* 增加下边距，为新闻之间创造更多空间 */
+}
+
+.subtext a {
+  color: #828282;
+  text-decoration: none;
+}
+
+.subtext a:hover {
+  text-decoration: underline;
+}
+
+.score {
+  color: #828282;
+}
+
+.hnuser {
+  color: #3c963c;
+  text-decoration: none;
+}
+
+.hnuser:hover {
+  text-decoration: underline;
+}
+
+.age a {
+  color: #828282;
+  text-decoration: none;
+}
+
+.age a:hover {
+  text-decoration: underline;
+}
+
+/* Spacer rows */
+.spacer {
+  height: 15px; /* 增加新闻之间的间距，从5px增加到15px */
+}
+
+/* Footer styling */
+.yclinks {
+  font-size: 8pt;
+  text-align: center;
+  color: #828282;
+}
+
+.yclinks a {
+  color: #828282;
+  text-decoration: none;
+}
+
+.yclinks a:hover {
+  text-decoration: underline;
+}
+
+/* Error and placeholder pages */
+h2 {
+  font-size: 12pt;
+  margin: 10px 0;
+}
+
+p {
+  font-size: 10pt;
+  margin: 5px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 750px) {
+  #hnmain {
+    width: 100% !important;
+  }
+
+  .pagetop {
+    font-size: 9pt;
+  }
+
+  .titleline {
+    font-size: 9pt;
+  }
+
+  .subtext {
+    font-size: 6pt;
+  }
+}
