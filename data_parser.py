@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from models import Story
+from scraper import get_hacker_news_html
 import re
 import logging
 
@@ -9,12 +10,14 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def parse_html_data(html_file_path="data.html"):
-    """Parse the data.html file and extract story information"""
+def parse_html_data():
+    """Parse the Hacker News HTML and extract story information"""
+    html_content = get_hacker_news_html()
+    if not html_content:
+        logger.error("No HTML content to parse.")
+        return []
+
     try:
-        with open(html_file_path, 'r', encoding='utf-8') as file:
-            html_content = file.read()
-        
         soup = BeautifulSoup(html_content, 'html.parser')
         stories = []
         
@@ -32,14 +35,11 @@ def parse_html_data(html_file_path="data.html"):
                 logger.error(f"Error extracting story from row: {e}")
                 continue
         
-        logger.info(f"Successfully parsed {len(stories)} stories from {html_file_path}")
+        logger.info(f"Successfully parsed {len(stories)} stories")
         return stories
         
-    except FileNotFoundError:
-        logger.error(f"HTML file not found: {html_file_path}")
-        return []
     except Exception as e:
-        logger.error(f"Error parsing HTML file {html_file_path}: {e}")
+        logger.error(f"Error parsing HTML content: {e}")
         return []
 
 def extract_story_info(story_row):
