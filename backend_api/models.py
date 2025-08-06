@@ -118,5 +118,6 @@ class Story:
             'is_external': self.is_external_link(),
             'story_link': self.get_story_link(),
             'comment_link': self.get_comment_link(),
-            'user_link': self.get_user_link()
+            'user_link': self.get_user_link(),
+            'translated_title': self.translated_title
         }

@@ -2,6 +2,7 @@
 # Simple test script for API endpoints
 
 from app import app
+from backend_api.api_service import api_service
 import json
 
 def test_api():

@@ -2,8 +2,7 @@
 from flask import Flask, render_template, request, jsonify
 import logging
 import os
-from data_parser import get_cached_stories, refresh_story_cache
-from translator import translator_service
+from backend_api.api_service import api_service
 
 # Configure logging
 logging.basicConfig(
@@ -26,7 +25,7 @@ app.config.update(
 def index():
     """Homepage with story list"""
     try:
-        stories = get_cached_stories()
+        stories = api_service.get_stories()
         # Check if translation is requested
         translate = request.args.get('translate', 'false').lower() == 'true'
         logger.info(f"Serving homepage with {len(stories)} stories (translate: {translate})")
@@ -41,8 +40,7 @@ def story(story_id):
     """Individual story page (placeholder)"""
     try:
         # Find the story by ID
-        stories = get_cached_stories()
-        story = next((s for s in stories if s.id == story_id), None)
+        story = api_service.get_story_by_id(story_id)
         
         if story:
             logger.info(f"Serving story page for ID: {story_id}")
@@ -129,8 +127,7 @@ def login():
 def api_stories():
     """API endpoint to get stories as JSON"""
     try:
-        stories = get_cached_stories()
-        stories_data = [story.to_dict() for story in stories]
+        stories_data = api_service.get_stories_dict()
         return jsonify({
             'success': True,
             'count': len(stories_data),
@@ -147,7 +144,7 @@ def api_stories():
 def api_refresh():
     """API endpoint to refresh story cache"""
     try:
-        stories = refresh_story_cache()
+        stories = api_service.refresh_stories()
         logger.info("Story cache refreshed via API")
         return jsonify({
             'success': True,
@@ -164,38 +161,8 @@ def api_refresh():
 def api_translate():
     """API endpoint to translate stories with priority loading"""
     try:
-        stories = get_cached_stories()
-        
-        # Count already translated stories
-        already_translated = sum(1 for story in stories if story.translated_title)
-        
-        if already_translated == len(stories):
-            return jsonify({
-                'success': True,
-                'message': 'All stories already translated',
-                'priority_count': len(stories),
-                'background_count': 0,
-                'total_stories': len(stories),
-                'already_completed': True
-            })
-        
-        # Start smart translation (now fully async for fast response)
-        translator_service.translate_stories_smart(stories, priority_count=3)
-        
-        # Return immediately without waiting for translation to complete
-        untranslated_count = len(stories) - already_translated
-        priority_count = min(3, untranslated_count)
-        remaining_count = max(0, untranslated_count - priority_count)
-        
-        logger.info(f"Translation initiated: {priority_count} priority, {remaining_count} background")
-        return jsonify({
-            'success': True,
-            'message': f'Translation started',
-            'priority_count': priority_count,
-            'background_count': remaining_count,
-            'total_stories': len(stories),
-            'already_completed': False
-        })
+        result = api_service.translate_stories(priority_count=3)
+        return jsonify(result)
     except Exception as e:
         logger.error(f"Error in translation API: {e}")
         return jsonify({
@@ -207,15 +174,8 @@ def api_translate():
 def api_translation_status():
     """API endpoint to check translation status"""
     try:
-        stories = get_cached_stories()
-        translated_count = sum(1 for story in stories if story.translated_title)
-        
-        return jsonify({
-            'success': True,
-            'translated_count': translated_count,
-            'total_stories': len(stories),
-            'progress': round((translated_count / len(stories)) * 100, 1) if stories else 0
-        })
+        result = api_service.get_translation_status()
+        return jsonify(result)
     except Exception as e:
         logger.error(f"Error checking translation status: {e}")
         return jsonify({
@@ -227,21 +187,8 @@ def api_translation_status():
 def api_translations():
     """API endpoint to get all translations for dynamic update"""
     try:
-        stories = get_cached_stories()
-        translations = {}
-        
-        for story in stories:
-            if story.translated_title:
-                translations[story.id] = {
-                    'original_title': story.title,
-                    'translated_title': story.translated_title
-                }
-        
-        return jsonify({
-            'success': True,
-            'translations': translations,
-            'count': len(translations)
-        })
+        result = api_service.get_translations()
+        return jsonify(result)
     except Exception as e:
         logger.error(f"Error getting translations: {e}")
         return jsonify({
@@ -264,19 +211,77 @@ def internal_error(error):
     return render_template('error.html', 
                          error_message="Internal server error."), 500
 
+# Crawler API routes
+@app.route('/api/crawl')
+def api_crawl():
+    """API endpoint to crawl fresh stories from HN"""
+    try:
+        story_type = request.args.get('type', 'top')  # 'top' or 'new'
+        limit = int(request.args.get('limit', 30))
+        
+        result = api_service.crawl_fresh_stories(story_type=story_type, limit=limit)
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Error in crawl API: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Unable to crawl stories'
+        }), 500
+
+@app.route('/api/load-json')
+def api_load_json():
+    """API endpoint to load stories from JSON file"""
+    try:
+        filename = request.args.get('filename')
+        if not filename:
+            return jsonify({
+                'success': False,
+                'error': 'Filename parameter is required'
+            }), 400
+        
+        result = api_service.load_stories_from_json(filename)
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Error in load JSON API: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Unable to load stories from JSON'
+        }), 500
+
+@app.route('/api/stories/paginated')
+def api_stories_paginated():
+    """API endpoint to get paginated stories for infinite scroll"""
+    try:
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 10))
+        
+        result = api_service.get_paginated_stories(page=page, per_page=per_page)
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Error in paginated stories API: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Unable to get paginated stories'
+        }), 500
+
 # Health check endpoint
 @app.route('/health')
 def health():
     """Health check endpoint"""
-    return jsonify({
-        'status': 'healthy',
-        'stories_loaded': len(get_cached_stories())
-    })
+    try:
+        result = api_service.get_health_status()
+        return jsonify(result)
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return jsonify({
+            'status': 'unhealthy',
+            'error': str(e)
+        }), 500
 
 if __name__ == '__main__':
     # Load stories on startup
     try:
-        stories = get_cached_stories()
+        stories = api_service.get_stories()
         logger.info(f"Application started with {len(stories)} stories loaded")
     except Exception as e:
         logger.error(f"Error loading stories on startup: {e}")

@@ -7,36 +7,17 @@
   box-sizing: border-box;
 }
 
-/* 975圆体字体定义 */
-@font-face {
-  font-family: "975MaruSC";
-  src: url("../fonts/975MaruSC-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "975MaruSC";
-  src: url("../fonts/975MaruSC-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "975MaruSC";
-  src: url("../fonts/975MaruSC-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-display: swap;
-}
+/* Google Fonts - Nunito and Roboto are loaded via HTML link tags */
 
 body {
-  font-family: "975MaruSC", "Nunito", Verdana, Geneva, sans-serif;
+  font-family: "Nunito", "Roboto", sans-serif;
   font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
   color: #000000;
   background-color: #f6f6ef;
   margin: 0;
   padding: 0;
   line-height: 1.4; /* 增加行高提高可读性 */
+  font-weight: 400; /* 使用Nunito的regular weight */
 }
 
 /* Main table styling */
@@ -55,7 +36,9 @@ td {
 
 /* Header styling */
 .pagetop {
+  font-family: "Roboto", sans-serif;
   font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
+  font-weight: 500; /* Medium weight for header */
   color: #000000;
 }
 
@@ -87,7 +70,9 @@ td {
 }
 
 .rank {
+  font-family: "Roboto", sans-serif;
   font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
+  font-weight: 400; /* Regular weight for rank numbers */
   text-align: right;
   color: #828282;
   padding-right: 6px; /* 增加间距 */
@@ -110,13 +95,14 @@ td {
 }
 
 .titleline {
+  font-family: "Nunito", sans-serif;
   font-size: 15pt; /* 增大150%: 10pt * 1.5 = 15pt */
 }
 
 .titleline a {
   color: #1a4480; /* 深蓝色字体，与翻译后的颜色一致 */
   text-decoration: none;
-  font-weight: bold; /* 将标题加粗 */
+  font-weight: 700; /* 使用Nunito的bold weight */
 }
 
 .titleline a:visited {
@@ -128,7 +114,9 @@ td {
 }
 
 .sitebit {
+  font-family: "Roboto", sans-serif;
   font-size: 12pt; /* 增大150%: 8pt * 1.5 = 12pt */
+  font-weight: 300; /* Light weight for domain names */
   color: #828282;
 }
 
@@ -147,7 +135,9 @@ td {
 
 /* Subtext (points, author, time, comments) */
 .subtext {
+  font-family: "Roboto", sans-serif;
   font-size: 10.5pt; /* 增大150%: 7pt * 1.5 = 10.5pt */
+  font-weight: 400; /* Regular weight for subtext */
   color: #828282;
   padding-top: 3px; /* 增加上边距 */
   padding-bottom: 8px; /* 增加下边距，为新闻之间创造更多空间 */
@@ -191,7 +181,9 @@ td {
 
 /* Footer styling */
 .yclinks {
-  font-size: 8pt;
+  font-family: "Roboto", sans-serif;
+  font-size: 12pt; /* 增大150%: 8pt * 1.5 = 12pt */
+  font-weight: 300; /* Light weight for footer */
   text-align: center;
   color: #828282;
 }
